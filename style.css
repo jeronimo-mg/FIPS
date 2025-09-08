@@ -1,0 +1,34 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#controls {
+    margin-bottom: 20px;
+}
+
+#add-function-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#breadcrumb {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+#breadcrumb a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+#paper-container {
+    border: 1px solid #ccc;
+}
