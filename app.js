@@ -50,14 +50,14 @@ joint.shapes.standard.Rectangle.define('idef.Function', {
             cursor: 'pointer'
         },
         drillDownButton: {
-            event: 'element:drilldown:click',
-            d: 'M 15 5 L 5 10 L 15 15 Z',
+            'data-action': 'drill-down',
+            d: 'M 5 5 L 15 5 L 10 15 Z', // Downward triangle
             fill: 'blue',
             cursor: 'pointer',
-            'ref-x': '100%',
-            'ref-y': '50%',
-            'ref-dx': -20,
-            'ref-dy': -5,
+            'ref-x': '100%', // Right edge
+            'ref-y': '0%',   // Top edge
+            'ref-dx': -20,   // Move left from the right edge
+            'ref-dy': 5,     // Move down from the top edge
         }
     },
     ports: {
@@ -120,19 +120,22 @@ paper.on('link:label:pointerdblclick', (linkView, evt) => {
     });
 });
 
-paper.on('element:drilldown:click', (elementView) => {
-    const model = elementView.model;
-    if (model instanceof joint.shapes.idef.Function) {
-        const childGraphId = model.id;
-        if (!graphs[childGraphId]) {
-            graphs[childGraphId] = {
-                graph: new joint.dia.Graph({}, { cellNamespace: namespace }),
-                parent: currentGraphId
-            };
+paper.on('element:pointerclick', (elementView, evt) => {
+    const action = evt.target.getAttribute('data-action');
+    if (action === 'drill-down') {
+        const model = elementView.model;
+        if (model instanceof joint.shapes.idef.Function) {
+            const childGraphId = model.id;
+            if (!graphs[childGraphId]) {
+                graphs[childGraphId] = {
+                    graph: new joint.dia.Graph({}, { cellNamespace: namespace }),
+                    parent: currentGraphId
+                };
+            }
+            currentGraphId = childGraphId;
+            paper.model = graphs[currentGraphId].graph;
+            updateBreadcrumb();
         }
-        currentGraphId = childGraphId;
-        paper.model = graphs[currentGraphId].graph;
-        updateBreadcrumb();
     }
 });
 
